@@ -60,62 +60,30 @@ In your GitHub repository settings → Secrets → Actions:
 
 ### 3b. GitHub Actions Workflow
 
-Create `.github/workflows/deploy.yml`:
+The workflow is already committed at `.github/workflows/deploy.yml`.
+It runs automatically on every push to `main`:
 
-```yaml
-name: Deploy to Cloudflare Pages
+1. `pnpm install --frozen-lockfile`
+2. `pnpm --filter @dignity/web build` (Next.js build)
+3. `npx @opennextjs/cloudflare build` (OpenNext → `.cf-deploy`)
+4. `wrangler pages deploy .cf-deploy --project-name=dignity-institutional --branch=main`
 
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm --filter @dignity/web build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          NODE_ENV: production
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/.next --project-name=dignity-institutional --commit-dirty=true
-```
+All 5 secrets listed above are already configured on the repo.
 
 ---
 
 ## 4. Manual Deploy (one-time or emergency)
 
 ```bash
-# Authenticate
-wrangler login
+# From repo root
+cd apps/web
 
-# Build
-pnpm --filter @dignity/web build
+# Build Next.js + OpenNext for Cloudflare
+pnpm build
+npx @opennextjs/cloudflare build
 
-# Deploy
-wrangler pages deploy apps/web/.next \
+# Deploy the .cf-deploy output
+npx wrangler pages deploy .cf-deploy \
   --project-name=dignity-institutional \
   --branch=main
 ```
@@ -130,8 +98,8 @@ If the Pages project does not yet exist:
 wrangler pages project create dignity-institutional
 ```
 
-Then configure the custom domain in the Cloudflare dashboard:
-Pages → dignity-institutional → Custom Domains → Add `dignity.unykorn.org`
+The custom domain `dignity.unykorn.org` has already been added via API (2026-04-07).
+SSL certificate authority: Google. Status should be "active" within a few minutes.
 
 ---
 
