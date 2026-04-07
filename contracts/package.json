@@ -1,0 +1,22 @@
+{
+  "name": "@dignity/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.ts --network baseSepolia",
+    "typechain": "hardhat typechain"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0",
+    "@openzeppelin/contracts-upgradeable": "^5.1.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@typechain/hardhat": "^9.1.0",
+    "hardhat": "^2.22.15",
+    "typescript": "^5.7.3"
+  }
+}

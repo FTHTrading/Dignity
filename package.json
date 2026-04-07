@@ -1,0 +1,36 @@
+{
+  "name": "dignity-institutional-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Dignity — institutional precious-metals reserve-backed digital security issuer operating system",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "format": "prettier --write .",
+    "db:generate": "pnpm --filter @dignity/db db:generate",
+    "db:push": "pnpm --filter @dignity/db db:push",
+    "db:migrate": "pnpm --filter @dignity/db db:migrate",
+    "db:seed": "pnpm --filter @dignity/db db:seed",
+    "db:studio": "pnpm --filter @dignity/db db:studio",
+    "validate-env": "node scripts/validate-env.js",
+    "check-ports": "powershell -File scripts/check-ports.ps1",
+    "bootstrap": "powershell -File scripts/bootstrap-local.ps1"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

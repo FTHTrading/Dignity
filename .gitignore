@@ -1,0 +1,26 @@
+node_modules
+.next
+dist
+build
+.turbo
+*.tsbuildinfo
+logs
+tmp
+.env.local
+.env*.local
+coverage
+contracts/artifacts
+contracts/cache
+contracts/typechain-types
+prisma/migrations
+*.lock
+!pnpm-lock.yaml
+
+# OpenNext / Wrangler build outputs
+.open-next
+.cf-deploy
+.wrangler
+worker.js
+
+# Prisma generated client (re-generated from schema)
+packages/db/src/generated/

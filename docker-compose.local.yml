@@ -1,0 +1,51 @@
+version: "3.9"
+
+# ─── Dignity Local Development Stack ────────────────────────────────────────
+# Project name is dignity-local to avoid collision with other compose stacks.
+# Ports are dignity-specific: 5442 (postgres), 6382 (redis), 8646 (hardhat)
+#
+# Usage:
+#   docker compose -f docker-compose.local.yml up -d
+#   docker compose -f docker-compose.local.yml down
+
+name: dignity-local
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: dignity-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: dignity_institutional
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5442:5432"
+    volumes:
+      - dignity_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dignity_institutional"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: dignity-redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    ports:
+      - "6382:6379"
+    volumes:
+      - dignity_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  dignity_postgres_data:
+    name: dignity_postgres_data
+  dignity_redis_data:
+    name: dignity_redis_data

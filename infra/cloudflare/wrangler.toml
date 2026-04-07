@@ -1,0 +1,29 @@
+/*
+ * Cloudflare Pages deployment configuration
+ * Target: dignity.unykorn.org
+ *
+ * This file is used by `wrangler pages deploy` or the Cloudflare dashboard
+ * GitHub Actions integration.
+ *
+ * Build command: pnpm build (from monorepo root, turbo runs web build)
+ * Output dir:    apps/web/.next
+ */
+
+name = "dignity-institutional"
+compatibility_date = "2024-09-23"
+
+[env.production]
+name = "dignity-institutional"
+route = { pattern = "dignity.unykorn.org/*", zone_name = "unykorn.org" }
+
+[env.staging]
+name = "dignity-institutional-staging"
+
+# Build configuration for Cloudflare Pages
+[build]
+command = "cd ../.. && pnpm --filter @dignity/web build"
+cwd = "apps/web"
+
+[build.upload]
+format = "directory"
+dir = ".next"

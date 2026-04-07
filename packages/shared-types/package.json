@@ -1,0 +1,13 @@
+{
+  "name": "@dignity/shared-types",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dignity — shared TypeScript types, enums, and interfaces",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

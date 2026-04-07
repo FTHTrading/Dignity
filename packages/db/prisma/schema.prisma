@@ -1,0 +1,1277 @@
+// Dignity Institutional Platform — Prisma Schema
+// Domain: Reserve-backed institutional digital security issuer operating system
+// Token: DIGAU | Program: Dignity | DB: dignity_institutional
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  SYSTEM_ADMIN
+  COMPLIANCE_OFFICER
+  TREASURY_OFFICER
+  MARKET_OPS_OFFICER
+  INVESTOR_RELATIONS
+  AUDITOR
+  MARKET_MAKER
+  INVESTOR
+  PUBLIC
+}
+
+enum KycStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  EXPIRED
+  SUSPENDED
+}
+
+enum KybStatus {
+  NOT_REQUIRED
+  IN_PROGRESS
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum AccreditationStatus {
+  NOT_REQUIRED
+  PENDING
+  VERIFIED
+  EXPIRED
+  REJECTED
+}
+
+enum InvestorType {
+  INDIVIDUAL
+  ENTITY
+  TRUST
+  FUND
+  FAMILY_OFFICE
+  SOVEREIGN_WEALTH
+  PENSION
+}
+
+enum TokenStatus {
+  PLANNED
+  DRAFT
+  UNDER_REVIEW
+  APPROVED
+  ACTIVE
+  SUSPENDED
+  REDEEMED
+  TERMINATED
+}
+
+enum OfferingStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  OVERSUBSCRIBED
+  CANCELLED
+  SETTLED
+}
+
+enum SubscriptionStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_KYC
+  PENDING_FUNDS
+  APPROVED
+  REJECTED
+  SETTLED
+  CANCELLED
+}
+
+enum RedemptionStatus {
+  REQUESTED
+  PENDING_APPROVAL
+  APPROVED
+  PROCESSING
+  SETTLED
+  REJECTED
+  CANCELLED
+}
+
+enum ReserveAssetClass {
+  GOLD_BULLION
+  GOLD_ETF
+  SILVER_BULLION
+  PLATINUM
+  PALLADIUM
+  CASH_USD
+  CASH_EUR
+  TREASURY_BILL
+  MONEY_MARKET
+  OTHER
+}
+
+enum ReserveLotStatus {
+  ACTIVE
+  PARTIALLY_REDEEMED
+  REDEEMED
+  ENCUMBERED
+  DISPUTED
+  ARCHIVED
+}
+
+enum AttestationStatus {
+  DRAFT
+  SUBMITTED
+  VERIFIED
+  SUPERSEDED
+  REVOKED
+}
+
+enum AttestationType {
+  RESERVE_VALUATION
+  CUSTODY_CONFIRMATION
+  NAV_CALCULATION
+  COMPLIANCE_SIGN_OFF
+  ANNUAL_AUDIT
+  QUARTERLY_REVIEW
+}
+
+enum TreasuryAccountType {
+  OPERATING
+  RESERVE
+  ESCROW
+  REDEMPTION_POOL
+  MARKET_MAKING
+  FEE_COLLECTION
+}
+
+enum MovementType {
+  SUBSCRIPTION_RECEIPT
+  REDEMPTION_PAYMENT
+  MARKET_MAKER_ALLOCATION
+  REBALANCE
+  FEE
+  INTEREST
+  EXPENSE
+  CORRECTION
+}
+
+enum SettlementRail {
+  FIAT_WIRE
+  FIAT_ACH
+  USDC_ERC20
+  USDT_ERC20
+  ON_CHAIN_NATIVE
+  DELIVERY_VS_PAYMENT
+}
+
+enum VenueStatus {
+  ACTIVE
+  SUSPENDED
+  UNDER_REVIEW
+  TERMINATED
+  PENDING_APPROVAL
+}
+
+enum VenueType {
+  OTC_BROKER
+  APPROVED_EXCHANGE
+  ATS
+  BILATERAL_OTC
+  INTERNAL_DESK
+}
+
+enum MarketMakerStatus {
+  ACTIVE
+  SUSPENDED
+  UNDER_REVIEW
+  OFFBOARDED
+}
+
+enum OtcRfqStatus {
+  OPEN
+  QUOTED
+  ACCEPTED
+  REJECTED
+  EXPIRED
+  SETTLED
+  CANCELLED
+}
+
+enum CircuitBreakerTrigger {
+  NAV_DEVIATION
+  SPREAD_BREACH
+  VOLUME_SPIKE
+  PRICE_ANOMALY
+  LIQUIDITY_GAP
+  MANUAL_HALT
+}
+
+enum AuditEventCategory {
+  AUTH
+  KYC
+  TOKEN_ACTION
+  COMPLIANCE
+  TREASURY
+  RESERVE
+  ATTESTATION
+  MARKET_OPS
+  SYSTEM
+  ADMIN_ACTION
+}
+
+enum DocumentType {
+  SUBSCRIPTION_AGREEMENT
+  INVESTOR_DISCLOSURE
+  KYC_IDENTITY
+  KYB_ENTITY
+  ATTESTATION_REPORT
+  RESERVE_AUDIT
+  OFFERING_DOCUMENT
+  LEGAL_OPINION
+  RISK_DISCLOSURE
+  POLICY_DOCUMENT
+  CUSTODY_RECEIPT
+  PROOF_PACKAGE
+}
+
+enum PolicyStatus {
+  DRAFT
+  ACTIVE
+  SUPERSEDED
+  ARCHIVED
+}
+
+enum TransferDecision {
+  APPROVED
+  BLOCKED
+  PENDING_REVIEW
+  FLAGGED
+}
+
+enum ApprovalRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum ApprovalRequestType {
+  MINT_REQUEST
+  REDEMPTION_APPROVE
+  LP_ONBOARD
+  VENUE_TOGGLE
+  RESERVE_REPORT_PUBLISH
+  SPREAD_POLICY_CHANGE
+  TREASURY_WIRE
+}
+
+// ─── AUTH & USERS ─────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(PUBLIC)
+  passwordHash String?            // bcrypt hash; null = OAuth-only account
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  investorProfile    InvestorProfile?
+  auditEventsActed   AuditEvent[]     @relation("actor")
+  adminActions       AdminAction[]
+  sessions           Session[]
+  complianceDecisions      TransferApprovalDecision[] @relation("decidedBy")
+  approvalRequestsMade     ApprovalRequest[]          @relation("approvalRequests")
+  approvalRequestsApproved ApprovalRequest[]          @relation("approvalApprovals")
+  approvalRequestsRejected ApprovalRequest[]          @relation("approvalRejections")
+
+  @@index([email])
+  @@index([role])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+// ─── ISSUER PROGRAM ───────────────────────────────────────────────────────────
+
+model IssuerProgram {
+  id          String  @id @default(cuid())
+  slug        String  @unique  // e.g. "dignity"
+  name        String           // "Dignity"
+  description String?
+  active      Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  securityClasses  SecurityClass[]
+  offerings        OfferingRound[]
+  reserveAssets    ReserveAsset[]
+  treasuryAccounts TreasuryAccount[]
+  venues           Venue[]
+  policies         PolicyFile[]
+  brandSurface     BrandSurface?
+  reserveReports   ReserveReport[]
+}
+
+model BrandSurface {
+  id            String  @id @default(cuid())
+  programId     String  @unique
+  tagline       String?
+  logoUrl       String?
+  primaryColor  String  @default("#C9A84C")  // Dignity gold
+  accentColor   String  @default("#1A1A1A")  // Obsidian
+  websiteUrl    String?
+  legalName     String?
+  jurisdictions String[] // ISO 3166-1 alpha-2 list
+  updatedAt     DateTime @updatedAt
+
+  program IssuerProgram @relation(fields: [programId], references: [id])
+}
+
+model SecurityClass {
+  id              String      @id @default(cuid())
+  programId       String
+  symbol          String      @unique  // "DIGAU"
+  name            String               // "Dignity Gold"
+  description     String?
+  status          TokenStatus @default(DRAFT)
+  totalSupplyCap  String?              // Max issuance as string (big int safe)
+  circulatingSupply String   @default("0")
+  decimals        Int        @default(18)
+  contractAddress String?
+  chainId         Int?
+  reserveRatio    Float?               // e.g. 1.0 = fully backed
+  navPerToken     Float?               // USD per token, last calculated
+  navUpdatedAt    DateTime?
+  issuedAt        DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  program          IssuerProgram       @relation(fields: [programId], references: [id])
+  offerings        OfferingRound[]
+  subscriptions    SubscriptionRequest[]
+  redemptions      RedemptionRequest[]
+  navHistory       NavReference[]
+  liquiditySnapshots LiquiditySnapshot[]
+
+  @@index([symbol])
+  @@index([status])
+}
+
+model OfferingRound {
+  id            String        @id @default(cuid())
+  programId     String
+  securityId    String
+  name          String
+  status        OfferingStatus @default(DRAFT)
+  minInvestment Float?
+  maxInvestment Float?
+  targetRaise   Float?
+  totalRaised   Float          @default(0)
+  currency      String         @default("USD")
+  openAt        DateTime?
+  closeAt       DateTime?
+  settledAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  program       IssuerProgram   @relation(fields: [programId], references: [id])
+  security      SecurityClass   @relation(fields: [securityId], references: [id])
+  subscriptions SubscriptionRequest[]
+
+  @@index([status])
+}
+
+// ─── INVESTOR ─────────────────────────────────────────────────────────────────
+
+model InvestorProfile {
+  id                      String              @id @default(cuid())
+  userId                  String              @unique
+  investorType            InvestorType        @default(INDIVIDUAL)
+  entityName              String?
+  countryCode             String
+  stateOrProvince         String?
+  kycStatus               KycStatus           @default(NOT_STARTED)
+  kycProvider             String?
+  kycExternalId           String?
+  kycApprovedAt           DateTime?
+  kycExpiresAt            DateTime?
+  kybStatus               KybStatus           @default(NOT_REQUIRED)
+  kybProvider             String?
+  kybExternalId           String?
+  kybApprovedAt           DateTime?
+  accreditationStatus     AccreditationStatus @default(NOT_REQUIRED)
+  accreditationMethod     String?
+  accreditationVerifiedAt DateTime?
+  accreditationExpiresAt  DateTime?
+  walletAddress           String?             @unique
+  whitelisted             Boolean             @default(false)
+  whitelistedAt           DateTime?
+  sanctionsCleared        Boolean             @default(false)
+  sanctionsClearedAt      DateTime?
+  totalInvested           Float               @default(0)
+  totalRedeemed           Float               @default(0)
+  createdAt               DateTime            @default(now())
+  updatedAt               DateTime            @updatedAt
+
+  user              User                       @relation(fields: [userId], references: [id])
+  kyckyb            KycKybRecord[]
+  subscriptions     SubscriptionRequest[]
+  redemptions       RedemptionRequest[]
+  documents         SignedDocument[]
+  wallets           WalletAllowlist[]
+  transferDecisions TransferApprovalDecision[]
+  complianceEvents  ComplianceEvent[]
+
+  @@index([kycStatus])
+  @@index([accreditationStatus])
+  @@index([walletAddress])
+  @@index([whitelisted])
+}
+
+model KycKybRecord {
+  id             String    @id @default(cuid())
+  investorId     String
+  type           String    // "KYC" | "KYB"
+  provider       String
+  externalId     String?
+  status         KycStatus
+  submittedAt    DateTime  @default(now())
+  completedAt    DateTime?
+  expiresAt      DateTime?
+  rejectionReason String?
+  rawPayload     Json?
+
+  investor InvestorProfile @relation(fields: [investorId], references: [id])
+
+  @@index([investorId])
+  @@index([status])
+}
+
+model AccreditationRecord {
+  id          String              @id @default(cuid())
+  investorId  String
+  method      String              // "self-cert" | "third-party" | "qualified-purchaser"
+  status      AccreditationStatus
+  verifiedAt  DateTime?
+  expiresAt   DateTime?
+  evidence    String?             // Reference to document
+  createdAt   DateTime            @default(now())
+
+  @@index([investorId])
+}
+
+model JurisdictionRule {
+  id            String   @id @default(cuid())
+  countryCode   String
+  allowed       Boolean  @default(false)
+  requiresKyc   Boolean  @default(true)
+  requiresKyb   Boolean  @default(false)
+  accreditationRequired Boolean @default(true)
+  notes         String?
+  effectiveDate DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([countryCode])
+  @@index([allowed])
+}
+
+model SanctionsCheck {
+  id          String   @id @default(cuid())
+  investorId  String
+  walletAddress String?
+  provider    String
+  result      String   // "CLEAR" | "HIT" | "POSSIBLE_MATCH"
+  checkedAt   DateTime @default(now())
+  notes       String?
+
+  @@index([investorId])
+  @@index([result])
+}
+
+model WalletAllowlist {
+  id          String   @id @default(cuid())
+  investorId  String
+  address     String   @unique
+  chainId     Int
+  addedAt     DateTime @default(now())
+  removedAt   DateTime?
+  active      Boolean  @default(true)
+  addedByRole String?
+
+  investor InvestorProfile @relation(fields: [investorId], references: [id])
+
+  @@index([investorId])
+  @@index([address])
+  @@index([active])
+}
+
+model TransferApprovalDecision {
+  id            String           @id @default(cuid())
+  investorId    String
+  fromAddress   String
+  toAddress     String
+  tokenSymbol   String
+  amount        String
+  decision      TransferDecision
+  decidedById   String?
+  reason        String?
+  decidedAt     DateTime         @default(now())
+
+  investor  InvestorProfile @relation(fields: [investorId], references: [id])
+  decidedBy User?           @relation("decidedBy", fields: [decidedById], references: [id])
+
+  @@index([investorId])
+  @@index([decision])
+}
+
+model ComplianceEvent {
+  id          String   @id @default(cuid())
+  investorId  String
+  eventType   String   // "KYC_APPROVED" | "WALLET_ADDED" | "TRANSFER_BLOCKED" etc.
+  description String?
+  metadata    Json?
+  occurredAt  DateTime @default(now())
+
+  investor InvestorProfile @relation(fields: [investorId], references: [id])
+
+  @@index([investorId])
+  @@index([occurredAt])
+}
+
+// ─── SUBSCRIPTION & REDEMPTION ────────────────────────────────────────────────
+
+model SubscriptionRequest {
+  id            String             @id @default(cuid())
+  investorId    String
+  securityId    String
+  offeringId    String?
+  status        SubscriptionStatus @default(DRAFT)
+  tokenAmount   String
+  currency      String             @default("USD")
+  amountFiat    Float
+  settlementRail SettlementRail?
+  submittedAt   DateTime?
+  approvedAt    DateTime?
+  settledAt     DateTime?
+  rejectedAt    DateTime?
+  rejectionReason String?
+  txHash        String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  investor InvestorProfile @relation(fields: [investorId], references: [id])
+  security SecurityClass   @relation(fields: [securityId], references: [id])
+  offering OfferingRound?  @relation(fields: [offeringId], references: [id])
+
+  @@index([investorId])
+  @@index([securityId])
+  @@index([status])
+}
+
+model RedemptionRequest {
+  id              String           @id @default(cuid())
+  investorId      String
+  securityId      String
+  status          RedemptionStatus @default(REQUESTED)
+  tokenAmount     String
+  expectedFiat    Float?
+  actualFiat      Float?
+  currency        String           @default("USD")
+  settlementRail  SettlementRail?
+  windowRef       String?          // Redemption window identifier
+  requestedAt     DateTime         @default(now())
+  approvedAt      DateTime?
+  processedAt     DateTime?
+  settledAt       DateTime?
+  rejectedAt      DateTime?
+  rejectionReason String?
+  burnTxHash      String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  investor InvestorProfile @relation(fields: [investorId], references: [id])
+  security SecurityClass   @relation(fields: [securityId], references: [id])
+
+  @@index([investorId])
+  @@index([status])
+}
+
+// ─── RESERVE ──────────────────────────────────────────────────────────────────
+
+model ReserveAsset {
+  id          String            @id @default(cuid())
+  programId   String
+  assetClass  ReserveAssetClass
+  name        String
+  description String?
+  symbol      String?           // e.g. "XAU" for gold
+  custodian   String?
+  isin        String?
+  active      Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  program    IssuerProgram      @relation(fields: [programId], references: [id])
+  lots       ReserveLot[]
+  valuations ReserveValuation[]
+
+  @@index([programId])
+  @@index([assetClass])
+}
+
+model ReserveLot {
+  id              String          @id @default(cuid())
+  assetId         String
+  lotNumber       String          @unique
+  status          ReserveLotStatus @default(ACTIVE)
+  quantity        Float
+  unit            String          // "troy_oz" | "kg" | "units" | "USD"
+  acquiredAt      DateTime
+  acquiredPrice   Float           // per unit at acquisition
+  acquiredCurrency String         @default("USD")
+  custodianRef    String?         // custodian's internal reference
+  locationVault   String?
+  encumberedFrom  DateTime?
+  encumberedReason String?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  asset           ReserveAsset    @relation(fields: [assetId], references: [id])
+  custodyRecords  CustodyRecord[]
+  evidence        EvidenceDocument[]
+
+  @@index([assetId])
+  @@index([status])
+}
+
+model ReserveValuation {
+  id               String   @id @default(cuid())
+  assetId          String
+  valuedAt         DateTime
+  pricePerUnit     Float
+  currency         String   @default("USD")
+  totalValue       Float
+  source           String   // "LBMA" | "internal" | "custodian" | "third-party"
+  methodology      String?
+  notes            String?
+  createdAt        DateTime @default(now())
+
+  asset ReserveAsset @relation(fields: [assetId], references: [id])
+
+  @@index([assetId])
+  @@index([valuedAt])
+}
+
+model ReserveAttestation {
+  id             String            @id @default(cuid())
+  type           AttestationType
+  status         AttestationStatus @default(DRAFT)
+  attestor       String            // company/individual name
+  attestorType   String            // "third-party-auditor" | "custodian" | "issuer"
+  periodStart    DateTime
+  periodEnd      DateTime
+  submittedAt    DateTime?
+  verifiedAt     DateTime?
+  supersededById String?
+  revokedAt      DateTime?
+  summary        String?
+  totalReserveValue Float?
+  totalTokenSupply  String?
+  coverageRatio  Float?            // reserves / tokens outstanding
+  anchorTxHash   String?           // on-chain anchor transaction
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  evidence  EvidenceDocument[]
+  snapshots ReserveCoverageSnapshot[]
+
+  @@index([status])
+  @@index([attestor])
+}
+
+model CustodyRecord {
+  id            String    @id @default(cuid())
+  lotId         String
+  custodian     String
+  accountRef    String?
+  transferredIn DateTime
+  transferredOut DateTime?
+  confirmedAt   DateTime?
+  receiptRef    String?
+  notes         String?
+
+  lot ReserveLot @relation(fields: [lotId], references: [id])
+
+  @@index([lotId])
+  @@index([custodian])
+}
+
+model EvidenceDocument {
+  id           String   @id @default(cuid())
+  lotId        String?
+  attestationId String?
+  fileName     String
+  fileType     String   // "pdf" | "xlsx" | "image/jpeg" etc.
+  storageKey   String   // internal storage reference (S3 key or local path)
+  hashSha256   String   // content hash for integrity verification
+  uploadedAt   DateTime @default(now())
+  uploadedBy   String?
+  description  String?
+  isPublic     Boolean  @default(false)
+
+  lot         ReserveLot?        @relation(fields: [lotId], references: [id])
+  attestation ReserveAttestation? @relation(fields: [attestationId], references: [id])
+
+  @@index([lotId])
+  @@index([attestationId])
+}
+
+model ProofAnchor {
+  id           String   @id @default(cuid())
+  dataHash     String   @unique  // SHA-256 of the anchored data
+  dataType     String            // "attestation" | "nav" | "reserve-snapshot"
+  refId        String            // ID of the referenced record
+  txHash       String            // on-chain transaction hash
+  chainId      Int
+  blockNumber  Int?
+  anchoredAt   DateTime @default(now())
+  notes        String?
+
+  @@index([dataType])
+  @@index([txHash])
+}
+
+model ReserveCoverageSnapshot {
+  id               String   @id @default(cuid())
+  attestationId    String?
+  snapshotAt       DateTime
+  totalReserveUsd  Float
+  totalTokenSupply String
+  coverageRatio    Float    // reserves / circulating supply
+  navPerToken      Float    // USD per token
+  totalLiabilitiesUsd Float @default(0)
+  netAssetValue    Float
+  notes            String?
+  createdAt        DateTime @default(now())
+
+  attestation ReserveAttestation? @relation(fields: [attestationId], references: [id])
+
+  @@index([snapshotAt])
+}
+
+// ─── TREASURY ─────────────────────────────────────────────────────────────────
+
+model TreasuryAccount {
+  id          String              @id @default(cuid())
+  programId   String
+  name        String
+  accountType TreasuryAccountType
+  currency    String              @default("USD")
+  balance     Float               @default(0)
+  institution String?
+  accountRef  String?
+  active      Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  program   IssuerProgram      @relation(fields: [programId], references: [id])
+  movements TreasuryMovement[]
+
+  @@index([programId])
+  @@index([accountType])
+}
+
+model TreasuryMovement {
+  id             String       @id @default(cuid())
+  accountId      String
+  movementType   MovementType
+  direction      String       // "IN" | "OUT"
+  amount         Float
+  currency       String       @default("USD")
+  reference      String?
+  counterparty   String?
+  settlementRail SettlementRail?
+  settledAt      DateTime?
+  valueDate      DateTime
+  description    String?
+  auditRef       String?
+  createdAt      DateTime     @default(now())
+
+  account TreasuryAccount @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
+  @@index([movementType])
+  @@index([valueDate])
+}
+
+model FiatSettlement {
+  id             String   @id @default(cuid())
+  investorId     String
+  direction      String   // "INBOUND" | "OUTBOUND"
+  amount         Float
+  currency       String  @default("USD")
+  rail           SettlementRail
+  status         String  // "PENDING" | "COMPLETED" | "FAILED"
+  bankRef        String?
+  initiatedAt    DateTime @default(now())
+  completedAt    DateTime?
+  failureReason  String?
+  notes          String?
+
+  @@index([investorId])
+  @@index([status])
+}
+
+model ReconciliationRun {
+  id              String   @id @default(cuid())
+  ranAt           DateTime @default(now())
+  ranBy           String?
+  periodStart     DateTime
+  periodEnd       DateTime
+  status          String   // "IN_PROGRESS" | "COMPLETE" | "DISCREPANCY_FOUND"
+  discrepancies   Int      @default(0)
+  notes           String?
+  reportStorageKey String?
+
+  @@index([ranAt])
+  @@index([status])
+}
+
+// ─── LIQUIDITY & MARKET OPS ───────────────────────────────────────────────────
+
+model Venue {
+  id          String      @id @default(cuid())
+  programId   String
+  name        String
+  venueType   VenueType
+  status      VenueStatus @default(PENDING_APPROVAL)
+  url         String?
+  apiEndpoint String?
+  jurisdiction String?
+  approvedAt  DateTime?
+  suspendedAt DateTime?
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  program         IssuerProgram       @relation(fields: [programId], references: [id])
+  healthRecords   VenueHealth[]
+  inventoryAllocations InventoryAllocation[]
+
+  @@index([programId])
+  @@index([status])
+}
+
+model VenueHealth {
+  id           String   @id @default(cuid())
+  venueId      String
+  checkedAt    DateTime @default(now())
+  online       Boolean
+  bidLiquidity Float?   // USD depth on bid side
+  askLiquidity Float?   // USD depth on ask side
+  midPrice     Float?
+  spread       Float?   // absolute
+  spreadBps    Float?   // basis points
+  volume24h    Float?
+  latencyMs    Int?
+  notes        String?
+
+  venue Venue @relation(fields: [venueId], references: [id])
+
+  @@index([venueId])
+  @@index([checkedAt])
+}
+
+model MarketMaker {
+  id          String           @id @default(cuid())
+  name        String
+  entityType  String?
+  status      MarketMakerStatus @default(ACTIVE)
+  approvedAt  DateTime?
+  suspendedAt DateTime?
+  contactRef  String?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  allocations  InventoryAllocation[]
+  quotes       OtcQuote[]
+  spreadPolicies SpreadPolicy[]
+}
+
+model InventoryAllocation {
+  id            String   @id @default(cuid())
+  venueId       String?
+  marketMakerId String?
+  tokenSymbol   String
+  allocatedAmount String  // big int safe string
+  usedAmount    String   @default("0")
+  availableFrom DateTime @default(now())
+  expiresAt     DateTime?
+  active        Boolean  @default(true)
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  venue       Venue?      @relation(fields: [venueId], references: [id])
+  marketMaker MarketMaker? @relation(fields: [marketMakerId], references: [id])
+
+  @@index([tokenSymbol])
+  @@index([active])
+}
+
+model SpreadPolicy {
+  id            String   @id @default(cuid())
+  marketMakerId String
+  tokenSymbol   String
+  maxSpreadBps  Float
+  targetSpreadBps Float
+  minOrderSize  Float?
+  maxOrderSize  Float?
+  effectiveFrom DateTime @default(now())
+  effectiveTo   DateTime?
+  active        Boolean  @default(true)
+
+  marketMaker MarketMaker @relation(fields: [marketMakerId], references: [id])
+
+  @@index([marketMakerId])
+  @@index([tokenSymbol])
+}
+
+model QuoteSnapshot {
+  id           String   @id @default(cuid())
+  venueId      String?
+  marketMakerId String?
+  tokenSymbol  String
+  bid          Float
+  ask          Float
+  mid          Float
+  spread       Float
+  spreadBps    Float
+  timestamp    DateTime @default(now())
+
+  @@index([tokenSymbol])
+  @@index([timestamp])
+}
+
+model LiquiditySnapshot {
+  id               String   @id @default(cuid())
+  securityId       String
+  totalBidDepthUsd Float?
+  totalAskDepthUsd Float?
+  weightedMid      Float?
+  navReference     Float?
+  premiumDiscountBps Float?
+  activeMMs        Int      @default(0)
+  activeVenues     Int      @default(0)
+  snapshotAt       DateTime @default(now())
+
+  security SecurityClass @relation(fields: [securityId], references: [id])
+
+  @@index([securityId])
+  @@index([snapshotAt])
+}
+
+model NavReference {
+  id          String   @id @default(cuid())
+  securityId  String
+  navPerToken Float
+  currency    String   @default("USD")
+  methodology String?
+  calculatedAt DateTime @default(now())
+  effectiveDate DateTime
+  source      String   // "issuer" | "third-party" | "oracle"
+  notes       String?
+
+  security SecurityClass @relation(fields: [securityId], references: [id])
+
+  @@index([securityId])
+  @@index([effectiveDate])
+}
+
+model PricingAnomaly {
+  id          String   @id @default(cuid())
+  tokenSymbol String
+  venueId     String?
+  anomalyType String   // "spread_breach" | "price_gap" | "volume_spike" | "nav_deviation"
+  severity    String   // "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
+  detectedAt  DateTime @default(now())
+  resolvedAt  DateTime?
+  details     Json?
+  notes       String?
+  autoResolved Boolean @default(false)
+
+  @@index([tokenSymbol])
+  @@index([severity])
+  @@index([detectedAt])
+}
+
+model CircuitBreakerEvent {
+  id          String                @id @default(cuid())
+  tokenSymbol String
+  venueId     String?
+  trigger     CircuitBreakerTrigger
+  severity    String
+  triggeredAt DateTime              @default(now())
+  resolvedAt  DateTime?
+  resolution  String?
+  autoTriggered Boolean             @default(true)
+  details     Json?
+
+  @@index([tokenSymbol])
+  @@index([triggeredAt])
+}
+
+model OtcRfq {
+  id          String      @id @default(cuid())
+  investorId  String?
+  initiator   String      // investor wallet / entity name
+  tokenSymbol String
+  side        String      // "BUY" | "SELL"
+  quantity    String      // big int safe string
+  maxPrice    Float?
+  minPrice    Float?
+  expiresAt   DateTime
+  status      OtcRfqStatus @default(OPEN)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  quotes  OtcQuote[]
+  trades  OtcTrade[]
+
+  @@index([tokenSymbol])
+  @@index([status])
+}
+
+model OtcQuote {
+  id            String   @id @default(cuid())
+  rfqId         String
+  marketMakerId String
+  side          String   // "OFFER" | "BID"
+  price         Float
+  quantity      String
+  validUntil    DateTime
+  status        String   // "OPEN" | "ACCEPTED" | "REJECTED" | "EXPIRED"
+  submittedAt   DateTime @default(now())
+
+  rfq         OtcRfq     @relation(fields: [rfqId], references: [id])
+  marketMaker MarketMaker @relation(fields: [marketMakerId], references: [id])
+  trade       OtcTrade?
+
+  @@index([rfqId])
+  @@index([marketMakerId])
+}
+
+model OtcTrade {
+  id          String   @id @default(cuid())
+  rfqId       String
+  quoteId     String   @unique
+  price       Float
+  quantity    String
+  totalFiat   Float
+  currency    String   @default("USD")
+  settledAt   DateTime?
+  txHash      String?
+  status      String   // "PENDING" | "SETTLED" | "FAILED"
+  tradeDate   DateTime @default(now())
+
+  rfq   OtcRfq   @relation(fields: [rfqId], references: [id])
+  quote OtcQuote @relation(fields: [quoteId], references: [id])
+
+  @@index([rfqId])
+  @@index([status])
+}
+
+// ─── AUDIT & DOCUMENTS ────────────────────────────────────────────────────────
+
+model AuditEvent {
+  id          String             @id @default(cuid())
+  category    AuditEventCategory
+  actorId     String?
+  actorRole   String?
+  action      String
+  targetType  String?
+  targetId    String?
+  description String?
+  metadata    Json?
+  ipAddress   String?
+  hashChain   String?            // SHA-256 of (prevHash + event data)
+  prevEventId String?
+  occurredAt  DateTime           @default(now())
+
+  actor AuditEvent? @relation("prevLink", fields: [prevEventId], references: [id])
+  next  AuditEvent[] @relation("prevLink")
+  actorUser User?    @relation("actor", fields: [actorId], references: [id])
+
+  @@index([category])
+  @@index([actorId])
+  @@index([occurredAt])
+  @@index([targetType, targetId])
+}
+
+model AdminAction {
+  id          String   @id @default(cuid())
+  userId      String
+  action      String
+  targetType  String?
+  targetId    String?
+  payload     Json?
+  result      String?
+  performedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([action])
+}
+
+model SignedDocument {
+  id           String       @id @default(cuid())
+  investorId   String?
+  documentType DocumentType
+  fileName     String
+  storageKey   String
+  hashSha256   String
+  signerName   String?
+  signerEmail  String?
+  signedAt     DateTime?
+  expiresAt    DateTime?
+  isPublic     Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+
+  investor InvestorProfile? @relation(fields: [investorId], references: [id])
+
+  @@index([investorId])
+  @@index([documentType])
+}
+
+model DisclosureVersion {
+  id          String   @id @default(cuid())
+  slug        String
+  title       String
+  version     String
+  content     String   // Markdown or HTML
+  effectiveAt DateTime
+  supersededAt DateTime?
+  hashSha256  String
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@unique([slug, version])
+  @@index([slug])
+  @@index([effectiveAt])
+}
+
+model PolicyFile {
+  id          String       @id @default(cuid())
+  programId   String?
+  name        String
+  policyType  String       // "compliance" | "trading" | "valuation" | "custody" | "data"
+  status      PolicyStatus @default(DRAFT)
+  version     String
+  storageKey  String?
+  content     String?
+  effectiveAt DateTime?
+  expiredAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  program IssuerProgram? @relation(fields: [programId], references: [id])
+
+  @@index([policyType])
+  @@index([status])
+}
+
+model SystemAlert {
+  id          String   @id @default(cuid())
+  severity    String   // "INFO" | "WARN" | "ERROR" | "CRITICAL"
+  category    String
+  message     String
+  details     Json?
+  acknowledged Boolean @default(false)
+  acknowledgedBy String?
+  acknowledgedAt DateTime?
+  resolvedAt  DateTime?
+  occurredAt  DateTime @default(now())
+
+  @@index([severity])
+  @@index([acknowledged])
+  @@index([occurredAt])
+}
+
+// ─── APPROVAL WORKFLOW ────────────────────────────────────────────────────────
+
+model ApprovalRequest {
+  id              String                @id @default(cuid())
+  requestType     ApprovalRequestType
+  status          ApprovalRequestStatus @default(PENDING)
+  requestedById   String?
+  requestedByRole String?
+  approvedById    String?
+  rejectedById    String?
+  title           String
+  description     String?
+  payload         Json?
+  decisionNote    String?
+  requestedAt     DateTime              @default(now())
+  decidedAt       DateTime?
+  expiresAt       DateTime?
+
+  requestedBy User? @relation("approvalRequests", fields: [requestedById], references: [id])
+  approvedBy  User? @relation("approvalApprovals", fields: [approvedById], references: [id])
+  rejectedBy  User? @relation("approvalRejections", fields: [rejectedById], references: [id])
+
+  @@index([status])
+  @@index([requestType])
+  @@index([requestedAt])
+}
+
+// ─── RESERVE REPORTS ─────────────────────────────────────────────────────────
+
+model ReserveReport {
+  id                String    @id @default(cuid())
+  programId         String
+  title             String
+  periodStart       DateTime
+  periodEnd         DateTime
+  totalReserveUsd   Float
+  coverageRatio     Float
+  navPerToken       Float
+  circulatingSupply String
+  goldOz            Float?
+  status            String    @default("DRAFT") // "DRAFT" | "PUBLISHED" | "SUPERSEDED"
+  proofCid          String?
+  publishedAt       DateTime?
+  preparedBy        String?
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  program IssuerProgram @relation(fields: [programId], references: [id])
+
+  @@index([programId])
+  @@index([status])
+  @@index([periodEnd])
+}

@@ -1,0 +1,7 @@
+# Redirect www → apex
+https://www.dignity.unykorn.org/* https://dignity.unykorn.org/:splat 301
+
+# Redirect old public paths that might be bookmarked
+/proof-center /proof 301
+/board /leadership 301
+/about /evolution 301

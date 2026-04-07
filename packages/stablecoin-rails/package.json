@@ -1,0 +1,19 @@
+{
+  "name": "@dignity/stablecoin-rails",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@dignity/db": "workspace:*",
+    "@dignity/shared-types": "workspace:*",
+    "@dignity/audit": "workspace:*",
+    "axios": "^1.7.9"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

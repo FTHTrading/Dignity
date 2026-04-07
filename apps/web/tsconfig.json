@@ -1,0 +1,36 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@dignity/*": [
+        "../../packages/*/src"
+      ],
+      "@/*": [
+        "./*"
+      ]
+    },
+    "allowJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": [
+    ".",
+    "../../packages/*/src",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "../../packages/db/src/generated"
+  ]
+}
