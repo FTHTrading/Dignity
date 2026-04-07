@@ -1,7 +1,16 @@
 name = "dignity-institutional"
+main = ".open-next/worker.js"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = ".open-next/assets"
+workers_dev = true
+
+routes = [
+  { pattern = "dignity.unykorn.org", custom_domain = true }
+]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
 
 [vars]
 NODE_ENV = "production"
