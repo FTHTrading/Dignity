@@ -11,35 +11,7 @@ const NAV_LINKS = [
   { href: "/contact",     label: "Contact"     },
 ];
 
-const ECOSYSTEM = [
-  {
-    id: "BD",
-    title: "UnyKorn Broker-Dealer Platform",
-    url: "https://brokerdealer.unykorn.org/",
-    short: "brokerdealer.unykorn.org",
-    desc: "Full-stack broker-dealer infrastructure built to issue, settle, and govern tokenized securities. Seven production layers — Rust performance core, Fireblocks MPC custody, multi-chain stablecoin rails (USDC/USDT/DAI/RLUSD), Reg D/S compliance engine, 31 institutional documents, and supervised agentic operations. This is the registered platform Dignity's operational layer sits on.",
-    tags: ["Fireblocks MPC", "FINRA / SEC", "Reg D / Reg S", "Rust Engine", "KYC / AML"],
-    accent: "gold",
-  },
-  {
-    id: "402",
-    title: "x402 AI-to-AI Payment Protocol",
-    url: "https://x402.unykorn.org/",
-    short: "x402.unykorn.org",
-    desc: "The machine-native payment rail that powers Dignity's Phase IV agent commerce layer. HTTP 402 + Apostle Chain 7332 (ATP). AI agents pay other agents for institutional data access — sub-second settlement, Ed25519-signed, no custody, no human loop. HTTP 402 has been reserved since 1996; this is the first production implementation.",
-    tags: ["Chain 7332", "ATP", "Ed25519", "AI-Native", "Sub-second"],
-    accent: "neutral",
-  },
-  {
-    id: "FTH",
-    title: "FTH Trading Institutional Infrastructure",
-    url: "https://super-s.pages.dev/",
-    short: "super-s.pages.dev",
-    desc: "The complete FTH Trading platform guide — the full operating system for digital capital markets under Dignity and every other product. 100+ registered modules across 22 categories, 13 blockchains, 4 custody partners (Fireblocks, Anchorage, BitGo, Brink's), 16 build sessions, Genesis Protocol research engine with 396 published tests. Built for $1B+ AUM.",
-    tags: ["100+ Modules", "13 Chains", "4 Custody Partners", "Genesis Protocol", "$1B+ AUM"],
-    accent: "neutral",
-  },
-];
+
 
 const PILLARS = [
   { label: "Strategic Foundation",         sub: "Distinguished leadership and differentiated market thesis" },
@@ -176,60 +148,79 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ecosystem — broader infrastructure context */}
+      {/* What We Built */}
       <section className="relative z-10 border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-8 py-20">
           <div className="mb-12">
-            <p className="text-xs text-gold/70 uppercase tracking-[0.25em] font-medium mb-3">Supporting Ecosystem</p>
+            <p className="text-xs text-gold/70 uppercase tracking-[0.25em] font-medium mb-3">What We Built</p>
             <h2 className="font-serif text-3xl md:text-4xl font-light text-white mb-4 leading-[1.2]">
-              Everything Built to Support You.
+              Production Infrastructure,<br />
+              <span className="text-white/45 italic">Not a Pitch Deck.</span>
             </h2>
             <p className="text-sm text-white/40 max-w-2xl leading-relaxed">
-              Dignity is one platform within a broader institutional infrastructure ecosystem built
-              specifically to support broker-dealer operations, AI-native commerce, and the next
-              generation of capital markets. The sites below show the full scope of what has been
-              engineered on your behalf.
+              Every layer of Dignity was engineered from first principles — 100+ production modules,
+              13 blockchain integrations, 4 qualified custodians, and a deterministic compliance engine.
+              This is what operational validation looks like.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {ECOSYSTEM.map((site) => (
-              <a
-                key={site.id}
-                href={site.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-panel p-6 flex flex-col gap-5 group hover:border-gold/20 hover:bg-white/[0.03] transition-all"
+            {[
+              {
+                icon: "⚙",
+                title: "Rust Performance Core",
+                desc: "Sub-millisecond yield calculation, WASM-compiled policy engine, zero-copy serialization, and memory-safe custody validation across all settlement paths.",
+                tags: ["Rust", "WASM", "Sub-ms Latency"],
+              },
+              {
+                icon: "🔐",
+                title: "Multi-Custodian Custody",
+                desc: "Fireblocks MPC with 6 custom modules and 12 vault roles. BitGo, Anchorage Digital, and APMEX + Brink's for physical gold. 3-of-5 multi-sig with geo-distributed keys.",
+                tags: ["Fireblocks MPC", "BitGo", "Brink's"],
+              },
+              {
+                icon: "⛓",
+                title: "13-Chain Settlement",
+                desc: "Settlement on Stellar, Ethereum, and Solana. Anchored to Bitcoin (monthly OP_RETURN), XRPL (daily), and Polygon (daily). Full EVM coverage across 8 networks.",
+                tags: ["Bitcoin", "XRPL", "Stellar", "Ethereum"],
+              },
+              {
+                icon: "📋",
+                title: "Compliance Engine",
+                desc: "Persona KYC, Middesk KYB, ComplyAdvantage sanctions screening, Parallel Markets accreditation. Reg D/S, MiCA, MiFID II, FCA, MAS — 8 jurisdictions.",
+                tags: ["KYC/AML", "Reg D/S", "Multi-Jurisdiction"],
+              },
+              {
+                icon: "🤖",
+                title: "AI Agent Operations",
+                desc: "21 MCP tools across 7 domains. 6 supervised agent personas — Deal, Compliance, Investor, Treasury, Rights, Issuance — all human-approved with full audit trail.",
+                tags: ["MCP Mesh", "6 Agents", "21 Tools"],
+              },
+              {
+                icon: "🏗",
+                title: "Four-Eyes Governance",
+                desc: "System invariant — no override possible. Approval workflows with configurable expiry. SHA-256 hash-chain audit log. VaultLedger (append-only WORM-compliant).",
+                tags: ["Dual-Key", "Hash-Chain", "WORM Audit"],
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="glass-panel p-6 flex flex-col gap-4 hover:border-gold/20 hover:bg-white/[0.03] transition-all"
               >
-                <div className="flex items-start justify-between">
-                  <div className={`h-10 w-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    site.accent === 'gold'
-                      ? 'border border-gold/30 bg-gold/10'
-                      : 'border border-white/[0.12] bg-white/[0.04]'
-                  }`}>
-                    <span className={`text-xs font-bold font-mono ${
-                      site.accent === 'gold' ? 'text-gold' : 'text-white/50'
-                    }`}>{site.id}</span>
-                  </div>
-                  <span className="text-white/20 group-hover:text-white/50 transition-colors text-base leading-none mt-1">↗</span>
+                <div className="h-10 w-10 rounded-lg border border-white/[0.12] bg-white/[0.04] flex items-center justify-center">
+                  <span className="text-base">{item.icon}</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-white/90 group-hover:text-white transition-colors mb-1">
-                    {site.title}
-                  </p>
-                  <p className="text-[11px] text-gold/50 mb-3 font-mono">{site.short}</p>
-                  <p className="text-xs text-white/40 leading-relaxed">{site.desc}</p>
+                  <p className="text-sm font-semibold text-white/90 mb-2">{item.title}</p>
+                  <p className="text-xs text-white/40 leading-relaxed">{item.desc}</p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {site.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[10px] px-2 py-0.5 rounded-full border border-white/[0.08] text-white/25"
-                    >
+                  {item.tags.map((tag) => (
+                    <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full border border-white/[0.08] text-white/25">
                       {tag}
                     </span>
                   ))}
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         </div>

@@ -2,12 +2,26 @@
 
 <br/>
 
-<img src="https://img.shields.io/badge/DIGNITY-Institutional%20Gold%20Securities-C9A84C?style=for-the-badge&labelColor=0d0d0f&color=C9A84C" alt="Dignity" />
+# ██████╗ ██╗ ██████╗ ███╗   ██╗██╗████████╗██╗   ██╗
+# ██╔══██╗██║██╔════╝ ████╗  ██║██║╚══██╔══╝╚██╗ ██╔╝
+# ██║  ██║██║██║  ███╗██╔██╗ ██║██║   ██║    ╚████╔╝
+# ██║  ██║██║██║   ██║██║╚██╗██║██║   ██║     ╚██╔╝
+# ██████╔╝██║╚██████╔╝██║ ╚████║██║   ██║      ██║
+# ╚═════╝ ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝   ╚═╝      ╚═╝
+
+<br/>
+
+<img src="https://img.shields.io/badge/DIGNITY-Institutional%20Gold--Backed%20Digital%20Securities-C9A84C?style=for-the-badge&labelColor=0d0d0f&color=C9A84C&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzBkMGQwZiIvPjx0ZXh0IHg9IjEyIiB5PSIxNyIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2M5YTg0YyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXdlaWdodD0iYm9sZCI+RDwvdGV4dD48L3N2Zz4=" alt="Dignity" />
 
 <br/><br/>
 
+### **Institutional Gold-Backed Digital Securities Operating Platform**
+#### Reserve-backed · Board-governed · Audit-chained · Four-eyes enforced · MCP agent-native
+
+<br/>
+
 [![Platform](https://img.shields.io/badge/Platform-Next.js%2015-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org)
-[![Runtime](https://img.shields.io/badge/Edge%20Runtime-Cloudflare%20Workers-F48120?style=flat-square&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com)
+[![Runtime](https://img.shields.io/badge/Edge%20Runtime-Cloudflare%20Workers-F48120?style=flat-square&logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 [![Database](https://img.shields.io/badge/Database-PostgreSQL%20%2B%20Prisma-336791?style=flat-square&logo=postgresql&logoColor=white)](https://prisma.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Monorepo](https://img.shields.io/badge/Monorepo-Turborepo%20%2B%20pnpm-EF4444?style=flat-square&logo=turborepo&logoColor=white)](https://turbo.build)
@@ -16,29 +30,12 @@
 
 <br/>
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                                                         │
-│   DIGNITY — Institutional Gold-Backed Digital           │
-│   Securities Operating Platform                         │
-│                                                         │
-│   Reserve-backed · Board-governed · Audit-chained       │
-│   Four-eyes enforced · MCP agent-native                 │
-│                                                         │
-│   dignity.unykorn.org                                   │
-│                                                         │
-└─────────────────────────────────────────────────────────┘
-```
-
 **Dignity is not a cryptocurrency project.**  
 It is a regulated operating infrastructure for the issuance, management, and audit of gold-backed digital securities — built to institutional capital markets standards from first principles.
 
 <br/>
 
-[![Live Site](https://img.shields.io/badge/Live-dignity.unykorn.org-C9A84C?style=for-the-badge&labelColor=0d0d0f)](https://dignity.unykorn.org)
-[![Broker-Dealer](https://img.shields.io/badge/BD%20Platform-brokerdealer.unykorn.org-1E40AF?style=for-the-badge&labelColor=0d0d0f)](https://brokerdealer.unykorn.org)
-[![x402](https://img.shields.io/badge/x402%20Protocol-x402.unykorn.org-7C3AED?style=for-the-badge&labelColor=0d0d0f)](https://x402.unykorn.org)
-[![FTH](https://img.shields.io/badge/FTH%20Infrastructure-super--s.pages.dev-059669?style=for-the-badge&labelColor=0d0d0f)](https://super-s.pages.dev)
+[![Live Site](https://img.shields.io/badge/▶%20LIVE-dignity.unykorn.org-C9A84C?style=for-the-badge&labelColor=0d0d0f)](https://dignity.unykorn.org)
 
 </div>
 
@@ -67,7 +64,6 @@ It is a regulated operating infrastructure for the issuance, management, and aud
 - [Revenue Model](#revenue-model)
 - [Deployment](#deployment)
 - [Local Development](#local-development)
-- [Ecosystem](#ecosystem)
 
 ---
 
@@ -393,7 +389,7 @@ Dignity is the **first institutional digital asset platform** to expose its oper
 
 | Route | Page | Purpose |
 |---|---|---|
-| `/` | Homepage | Platform overview · Ecosystem links · Board reference |
+| `/` | Homepage | Platform overview · Infrastructure showcase · Board reference |
 | `/evolution` | Evolution | From strategic buildout → validated operating environment |
 | `/platform` | Platform | 14-package monorepo, approval workflows, reserve registry |
 | `/leadership` | Leadership | Full board of directors with domain pairings |
@@ -580,18 +576,6 @@ pnpm bootstrap      # full local environment bootstrap (PowerShell)
 
 ---
 
-## Ecosystem
-
-Dignity is one platform within a broader institutional infrastructure ecosystem:
-
-| System | URL | Description |
-|---|---|---|
-| **UnyKorn Broker-Dealer Platform** | [brokerdealer.unykorn.org](https://brokerdealer.unykorn.org) | Full-stack BD infrastructure — 7 production layers, Fireblocks MPC, Rust engine, Reg D/S, 31 institutional docs |
-| **x402 AI-to-AI Payment Protocol** | [x402.unykorn.org](https://x402.unykorn.org) | Machine-native HTTP 402 payment rail — Apostle Chain 7332, ATP, Ed25519, sub-second settlement |
-| **FTH Trading Infrastructure Guide** | [super-s.pages.dev](https://super-s.pages.dev) | 100+ modules, 13 blockchains, 4 custodians, Genesis Protocol research engine |
-
----
-
 ## Phase Roadmap
 
 | Phase | Description | Status |
@@ -599,7 +583,7 @@ Dignity is one platform within a broader institutional infrastructure ecosystem:
 | **Phase I** | Platform foundation — PostgreSQL, audit chain, Prisma schema | ✅ Complete |
 | **Phase II** | MCP tool mesh — 21 tools, 6 agent personas, A2A routing | ✅ Active |
 | **Phase III** | External agent JWT access, rate limiting, API gateway | 🔵 Planned |
-| **Phase IV** | x402 ATP payment rail — per-tool micro-fees, agent billing | 🔵 Roadmap |
+| **Phase IV** | ATP payment rail — per-tool micro-fees, agent billing | 🔵 Roadmap |
 
 ---
 

@@ -20,6 +20,14 @@ interface DocCard {
   description:    string;
 }
 
+const SLUG_TO_FILE: Record<string, string> = {
+  "executive-summary":    "Dignity_Executive_Summary_2026.pdf",
+  "proof-of-reserve":     "Dignity_Proof_of_Reserve_2026.pdf",
+  "investor-prospectus":  "Dignity_Investor_Prospectus_2026.pdf",
+  "governance-framework": "Dignity_Governance_Framework_2026.pdf",
+  "technology-brief":     "Dignity_Technology_Brief_2026.pdf",
+};
+
 const DOCS: DocCard[] = [
   {
     slug:           "executive-summary",
@@ -129,9 +137,10 @@ export default function DocumentsPage() {
             {/* Download button */}
             <div className="flex-shrink-0">
               <Link
-                href={`/api/documents/${doc.slug}`}
+                href={`/docs/${SLUG_TO_FILE[doc.slug]}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                download
                 className="inline-flex items-center gap-2 px-5 py-2.5
                            bg-transparent border border-[#c9a84c]/50
                            text-[#c9a84c] text-sm font-medium rounded
