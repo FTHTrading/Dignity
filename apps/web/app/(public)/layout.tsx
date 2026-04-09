@@ -8,8 +8,12 @@ const NAV = [
   { href: "/controls",     label: "Controls"     },
   { href: "/proof",        label: "Proof"        },
   { href: "/fundability",  label: "Fundability"  },
+  { href: "/governance",   label: "Governance"   },
+  { href: "/supply",       label: "Supply"       },
+  { href: "/reserve",      label: "Reserve"      },
   { href: "/agent",        label: "Intelligence" },
   { href: "/documents",    label: "Documents"    },
+  { href: "/data-room",    label: "Data Room"    },
   { href: "/roadmap",      label: "Roadmap"      },
   { href: "/contact",      label: "Contact"      },
 ];
@@ -91,9 +95,16 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                 <Link href="/roadmap"     className="block text-white/40 hover:text-white/70 transition-colors">Roadmap</Link>
               </div>
               <div className="space-y-2">
+                <p className="text-white/20 text-xs uppercase tracking-widest font-medium">On-Chain</p>
+                <Link href="/governance"  className="block text-white/40 hover:text-white/70 transition-colors">Governance</Link>
+                <Link href="/supply"      className="block text-white/40 hover:text-white/70 transition-colors">Supply</Link>
+                <Link href="/reserve"     className="block text-white/40 hover:text-white/70 transition-colors">Reserve</Link>
+              </div>
+              <div className="space-y-2">
                 <p className="text-white/20 text-xs uppercase tracking-widest font-medium">Investors</p>
                 <Link href="/fundability" className="block text-white/40 hover:text-white/70 transition-colors">Fundability</Link>
                 <Link href="/disclosures" className="block text-white/40 hover:text-white/70 transition-colors">Disclosures</Link>
+                <Link href="/data-room"   className="block text-white/40 hover:text-white/70 transition-colors">Data Room</Link>
                 <Link href="/contact"     className="block text-white/40 hover:text-white/70 transition-colors">Contact</Link>
               </div>
               <div className="space-y-2">
