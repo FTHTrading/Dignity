@@ -7,15 +7,18 @@ const NAV = [
   { href: "/leadership",   label: "Leadership"   },
   { href: "/controls",     label: "Controls"     },
   { href: "/proof",        label: "Proof"        },
-  { href: "/fundability",  label: "Fundability"  },
-  { href: "/governance",   label: "Governance"   },
-  { href: "/supply",       label: "Supply"       },
-  { href: "/reserve",      label: "Reserve"      },
-  { href: "/agent",        label: "Intelligence" },
-  { href: "/documents",    label: "Documents"    },
-  { href: "/data-room",    label: "Data Room"    },
-  { href: "/roadmap",      label: "Roadmap"      },
-  { href: "/contact",      label: "Contact"      },
+  { href: "/fundability",        label: "Fundability"      },
+  { href: "/economics",          label: "Economics"        },
+  { href: "/path-forward",       label: "Path Forward"     },
+  { href: "/investor-pathway",   label: "Investor Pathway" },
+  { href: "/governance",         label: "Governance"       },
+  { href: "/supply",             label: "Supply"           },
+  { href: "/reserve",            label: "Reserve"          },
+  { href: "/agent",              label: "Intelligence"     },
+  { href: "/documents",          label: "Documents"        },
+  { href: "/data-room",          label: "Data Room"        },
+  { href: "/roadmap",            label: "Roadmap"          },
+  { href: "/contact",            label: "Contact"          },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
@@ -102,10 +105,13 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
               </div>
               <div className="space-y-2">
                 <p className="text-white/20 text-xs uppercase tracking-widest font-medium">Investors</p>
-                <Link href="/fundability" className="block text-white/40 hover:text-white/70 transition-colors">Fundability</Link>
-                <Link href="/disclosures" className="block text-white/40 hover:text-white/70 transition-colors">Disclosures</Link>
-                <Link href="/data-room"   className="block text-white/40 hover:text-white/70 transition-colors">Data Room</Link>
-                <Link href="/contact"     className="block text-white/40 hover:text-white/70 transition-colors">Contact</Link>
+                <Link href="/fundability"      className="block text-white/40 hover:text-white/70 transition-colors">Fundability</Link>
+                <Link href="/economics"        className="block text-white/40 hover:text-white/70 transition-colors">Economics</Link>
+                <Link href="/path-forward"     className="block text-white/40 hover:text-white/70 transition-colors">Path Forward</Link>
+                <Link href="/investor-pathway" className="block text-white/40 hover:text-white/70 transition-colors">Investor Pathway</Link>
+                <Link href="/disclosures"      className="block text-white/40 hover:text-white/70 transition-colors">Disclosures</Link>
+                <Link href="/data-room"        className="block text-white/40 hover:text-white/70 transition-colors">Data Room</Link>
+                <Link href="/contact"          className="block text-white/40 hover:text-white/70 transition-colors">Contact</Link>
               </div>
               <div className="space-y-2">
                 <p className="text-white/20 text-xs uppercase tracking-widest font-medium">Legal</p>
