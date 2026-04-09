@@ -7,6 +7,7 @@ const NAV = [
   { href: "/leadership",   label: "Leadership"   },
   { href: "/controls",     label: "Controls"     },
   { href: "/proof",        label: "Proof"        },
+  { href: "/status",            label: "Status"           },
   { href: "/fundability",        label: "Fundability"      },
   { href: "/economics",          label: "Economics"        },
   { href: "/path-forward",       label: "Path Forward"     },
@@ -96,6 +97,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                 <Link href="/evolution"   className="block text-white/40 hover:text-white/70 transition-colors">Evolution</Link>
                 <Link href="/leadership"  className="block text-white/40 hover:text-white/70 transition-colors">Leadership</Link>
                 <Link href="/roadmap"     className="block text-white/40 hover:text-white/70 transition-colors">Roadmap</Link>
+                <Link href="/status"      className="block text-white/40 hover:text-white/70 transition-colors">Platform Status</Link>
               </div>
               <div className="space-y-2">
                 <p className="text-white/20 text-xs uppercase tracking-widest font-medium">On-Chain</p>
