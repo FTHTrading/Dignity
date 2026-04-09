@@ -132,7 +132,7 @@ export default function FundabilityPage() {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-10">
         <Link href="/proof"
           className="px-6 py-3 rounded-xl bg-gold text-obsidian font-semibold text-sm hover:bg-gold-light transition-colors text-center">
           View Proof Center →
@@ -141,6 +141,20 @@ export default function FundabilityPage() {
           className="px-6 py-3 rounded-xl border border-white/15 text-white/70 text-sm hover:border-white/30 hover:text-white transition-colors text-center">
           Governance & Controls
         </Link>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {[
+          { href: "/economics",        label: "Economics",        desc: "Fee schedule and AUM scenarios" },
+          { href: "/path-forward",     label: "Path Forward",     desc: "6-milestone path to first close" },
+          { href: "/investor-pathway", label: "Investor Pathway", desc: "7-step engagement process" },
+        ].map((l) => (
+          <Link key={l.href} href={l.href}
+            className="glass-card p-4 hover:border-gold/20 transition-all group">
+            <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors mb-1">{l.label}</p>
+            <p className="text-xs text-white/35">{l.desc}</p>
+          </Link>
+        ))}
       </div>
     </div>
   );

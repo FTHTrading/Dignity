@@ -21,7 +21,7 @@ const COMPLETED = [
 ];
 
 const UPCOMING: { label: string; timing: string; category: string }[] = [
-  { label: "Public institutional site at dignity.unykorn.org",                         timing: "In progress", category: "Public Presence" },
+  { label: "Public institutional site at dignity.unykorn.org",                         timing: "Complete",    category: "Public Presence" },
   { label: "Investor disclosure package — term sheets, offering documents",             timing: "Near-term",   category: "Legal / Compliance" },
   { label: "Third-party compliance review with board legal advisors",                   timing: "Near-term",   category: "Legal / Compliance" },
   { label: "Regulatory framework documentation aligned to operational evidence",        timing: "Near-term",   category: "Legal / Compliance" },
@@ -37,7 +37,7 @@ const UPCOMING: { label: string; timing: string; category: string }[] = [
 const CATEGORIES = [...new Set(UPCOMING.map((u) => u.category))];
 
 const TIMING_STYLE: Record<string, string> = {
-  "In progress": "bg-gold/10 border-gold/30 text-gold/80",
+  "Complete":    "bg-emerald-500/10 border-emerald-500/25 text-emerald-400/70",
   "Near-term":   "bg-white/5 border-white/15 text-white/50",
   "Phase III":   "bg-white/[0.02] border-white/[0.08] text-white/25",
 };

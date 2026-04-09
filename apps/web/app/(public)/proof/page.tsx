@@ -136,7 +136,7 @@ export default function ProofPage() {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-10">
         <Link href="/fundability"
           className="px-6 py-3 rounded-xl bg-gold text-obsidian font-semibold text-sm hover:bg-gold-light transition-colors text-center">
           Investment Fundability →
@@ -145,6 +145,20 @@ export default function ProofPage() {
           className="px-6 py-3 rounded-xl border border-white/15 text-white/70 text-sm hover:border-white/30 hover:text-white transition-colors text-center">
           Governance & Controls
         </Link>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {[
+          { href: "/status",       label: "Platform Status",  desc: "Full history + 14-milestone timeline" },
+          { href: "/compliance",   label: "Compliance",       desc: "Regulatory framework overview" },
+          { href: "/data-room",    label: "Data Room",         desc: "Diligence materials under NDA" },
+        ].map((l) => (
+          <Link key={l.href} href={l.href}
+            className="glass-card p-4 hover:border-gold/20 transition-all group">
+            <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors mb-1">{l.label}</p>
+            <p className="text-xs text-white/35">{l.desc}</p>
+          </Link>
+        ))}
       </div>
     </div>
   );

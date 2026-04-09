@@ -8,6 +8,7 @@ const NAV = [
   { href: "/economics",        label: "Economics"        },
   { href: "/path-forward",     label: "Path Forward"     },
   { href: "/investor-pathway", label: "Investor Pathway" },
+  { href: "/faq",             label: "FAQ"              },
   { href: "/data-room",        label: "Data Room"        },
   { href: "/contact",          label: "Contact"          },
 ];
@@ -101,6 +102,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                 <Link href="/economics"        className="block text-white/40 hover:text-white/70 transition-colors">Economics</Link>
                 <Link href="/path-forward"     className="block text-white/40 hover:text-white/70 transition-colors">Path Forward</Link>
                 <Link href="/investor-pathway" className="block text-white/40 hover:text-white/70 transition-colors">Investor Pathway</Link>
+                <Link href="/faq"              className="block text-white/40 hover:text-white/70 transition-colors">FAQ</Link>
+                <Link href="/token"            className="block text-white/40 hover:text-white/70 transition-colors">DIGAU Token</Link>
+                <Link href="/compliance"       className="block text-white/40 hover:text-white/70 transition-colors">Compliance</Link>
                 <Link href="/disclosures"      className="block text-white/40 hover:text-white/70 transition-colors">Disclosures</Link>
                 <Link href="/data-room"        className="block text-white/40 hover:text-white/70 transition-colors">Data Room</Link>
                 <Link href="/contact"          className="block text-white/40 hover:text-white/70 transition-colors">Contact</Link>
