@@ -2,24 +2,14 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 const NAV = [
-  { href: "/evolution",    label: "Evolution"    },
-  { href: "/platform",     label: "Platform"     },
-  { href: "/leadership",   label: "Leadership"   },
-  { href: "/controls",     label: "Controls"     },
-  { href: "/proof",        label: "Proof"        },
-  { href: "/status",            label: "Status"           },
-  { href: "/fundability",        label: "Fundability"      },
-  { href: "/economics",          label: "Economics"        },
-  { href: "/path-forward",       label: "Path Forward"     },
-  { href: "/investor-pathway",   label: "Investor Pathway" },
-  { href: "/governance",         label: "Governance"       },
-  { href: "/supply",             label: "Supply"           },
-  { href: "/reserve",            label: "Reserve"          },
-  { href: "/agent",              label: "Intelligence"     },
-  { href: "/documents",          label: "Documents"        },
-  { href: "/data-room",          label: "Data Room"        },
-  { href: "/roadmap",            label: "Roadmap"          },
-  { href: "/contact",            label: "Contact"          },
+  { href: "/evolution",        label: "Evolution"        },
+  { href: "/platform",         label: "Platform"         },
+  { href: "/status",           label: "Status"           },
+  { href: "/economics",        label: "Economics"        },
+  { href: "/path-forward",     label: "Path Forward"     },
+  { href: "/investor-pathway", label: "Investor Pathway" },
+  { href: "/data-room",        label: "Data Room"        },
+  { href: "/contact",          label: "Contact"          },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {

@@ -1,14 +1,14 @@
 import Link from "next/link";
 
 const NAV_LINKS = [
-  { href: "/evolution",   label: "Evolution"   },
-  { href: "/platform",    label: "Platform"    },
-  { href: "/leadership",  label: "Leadership"  },
-  { href: "/controls",    label: "Controls"    },
-  { href: "/proof",       label: "Proof"       },
-  { href: "/fundability", label: "Fundability" },
-  { href: "/roadmap",     label: "Roadmap"     },
-  { href: "/contact",     label: "Contact"     },
+  { href: "/evolution",        label: "Evolution"        },
+  { href: "/platform",         label: "Platform"         },
+  { href: "/status",           label: "Status"           },
+  { href: "/economics",        label: "Economics"        },
+  { href: "/path-forward",     label: "Path Forward"     },
+  { href: "/investor-pathway", label: "Investor Pathway" },
+  { href: "/data-room",        label: "Data Room"        },
+  { href: "/contact",          label: "Contact"          },
 ];
 
 
@@ -101,13 +101,17 @@ export default function HomePage() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link href="/evolution"
+          <Link href="/status"
             className="px-6 py-3 rounded-xl bg-gold text-obsidian font-semibold text-sm hover:bg-gold-light transition-colors shadow-gold-glow">
-            See the Evolution
+            Platform Status
           </Link>
-          <Link href="/proof"
+          <Link href="/path-forward"
             className="px-6 py-3 rounded-xl border border-white/15 text-white/70 text-sm hover:border-white/30 hover:text-white transition-colors">
-            View Proof Center
+            Path to Capital
+          </Link>
+          <Link href="/investor-pathway"
+            className="px-6 py-3 rounded-xl border border-white/10 text-white/40 text-sm hover:border-white/20 hover:text-white/70 transition-colors">
+            Investor Pathway
           </Link>
         </div>
       </section>
@@ -130,14 +134,18 @@ export default function HomePage() {
         <h2 className="text-xs text-white/25 uppercase tracking-[0.2em] font-medium mb-10">Platform Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { href: "/evolution",   title: "Evolution",    desc: "From strategic buildout phase to validated operating environment" },
-            { href: "/platform",    title: "Platform",     desc: "14-package monorepo with approval workflows, reserve registry, and audit logging" },
-            { href: "/leadership",  title: "Leadership",   desc: "Distinguished board with depth in banking, trading, mining, and capital formation" },
-            { href: "/controls",    title: "Controls",     desc: "Approval governance, reserve-report infrastructure, venue and LP controls" },
-            { href: "/proof",       title: "Proof Center", desc: "Runtime-validated milestones and audit-chain integrity confirmation" },
-            { href: "/fundability", title: "Fundability",  desc: "Why operational validation improves diligence posture for sophisticated capital" },
-            { href: "/roadmap",     title: "Roadmap",      desc: "What is complete, what remains, and where the next infrastructure layers will go" },
-            { href: "/contact",     title: "Contact",      desc: "Institutional inquiry, partnership, and engagement channels" },
+            { href: "/status",           title: "Platform Status",  desc: "Full historical record, current state dashboard, and 14-milestone forward timeline" },
+            { href: "/evolution",        title: "Evolution",        desc: "From strategic buildout phase to validated operating environment" },
+            { href: "/platform",         title: "Platform",         desc: "14-package monorepo with approval workflows, reserve registry, and audit logging" },
+            { href: "/economics",        title: "Economics",        desc: "Token parameters, fee schedule, and AUM revenue scenarios from $10M to $1B+" },
+            { href: "/path-forward",     title: "Path Forward",     desc: "6-milestone sequence from current state to first capital close (90–120 days)" },
+            { href: "/investor-pathway", title: "Investor Pathway", desc: "7-step Reg D engagement process for accredited investors, family offices, and QIBs" },
+            { href: "/data-room",        title: "Data Room",        desc: "Structured due diligence documents for qualified institutional investors" },
+            { href: "/leadership",       title: "Leadership",       desc: "Distinguished board with depth in banking, trading, mining, and capital formation" },
+            { href: "/governance",       title: "Governance",       desc: "On-chain token governance: voting rights, quorum, and proposal framework" },
+            { href: "/supply",           title: "Supply",           desc: "Real-time token supply breakdown: circulating, reserved, and treasury" },
+            { href: "/reserve",          title: "Reserve",          desc: "Gold backing registry: custodian allocation, LBMA bars, and coverage ratio" },
+            { href: "/proof",            title: "Proof Center",     desc: "Runtime-validated milestones and audit-chain integrity confirmation" },
           ].map((item) => (
             <Link key={item.href} href={item.href}
               className="glass-panel p-5 group hover:border-gold/20 hover:bg-white/[0.04] transition-all">
@@ -233,6 +241,84 @@ export default function HomePage() {
             "Before, Dignity's institutional case was primarily strategic.{" "}
             <span className="text-white not-italic font-normal">Today, it is increasingly operational.</span>"
           </p>
+        </div>
+      </section>
+
+      {/* Investor Resources Hub */}
+      <section className="relative z-10 border-t border-white/[0.06]">
+        <div className="max-w-6xl mx-auto px-8 py-20">
+          <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <p className="text-xs text-gold/70 uppercase tracking-[0.25em] font-medium mb-3">Investor Resources</p>
+              <h2 className="font-serif text-3xl md:text-4xl font-light text-white mb-4 leading-[1.2]">
+                Capital Formation,<br />
+                <span className="text-white/45 italic">Structured for Qualified Investors.</span>
+              </h2>
+              <p className="text-sm text-white/40 max-w-xl leading-relaxed">
+                Every material a sophisticated investor needs — economics, forward milestones,
+                engagement process, and on-chain proof — in one place.
+              </p>
+            </div>
+            <Link href="/investor-pathway"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gold/30 text-gold text-sm hover:bg-gold/10 transition-colors">
+              Begin Investor Process →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {[
+              {
+                badge: "Economics",
+                title: "Revenue Model",
+                desc: "Fee schedule across 7 revenue streams. AUM scenarios from $10M seed to $1B+ mature. Coverage ratio mechanics and token economics.",
+                href: "/economics",
+                accent: "text-gold",
+              },
+              {
+                badge: "Roadmap",
+                title: "Path to First Close",
+                desc: "6 milestones from current state to first capital close. T-01 governance hardening through T-05 first capital — 90-to-120 day critical path.",
+                href: "/path-forward",
+                accent: "text-amber-400",
+              },
+              {
+                badge: "Engagement",
+                title: "Investor Pathway",
+                desc: "7-step Reg D process: inquiry, NDA, data room access, KYC/AML, subscription, wire, portal activation. Indicative 6–8 week timeline.",
+                href: "/investor-pathway",
+                accent: "text-emerald-400",
+              },
+            ].map((item) => (
+              <Link key={item.href} href={item.href}
+                className="glass-panel p-6 hover:border-gold/20 hover:bg-white/[0.04] transition-all group">
+                <span className={`text-[10px] uppercase tracking-[0.2em] font-semibold ${item.accent} mb-4 block`}>{item.badge}</span>
+                <p className="text-sm font-semibold text-white/90 group-hover:text-white mb-3 transition-colors">{item.title}</p>
+                <p className="text-xs text-white/40 leading-relaxed mb-4">{item.desc}</p>
+                <span className="text-xs text-gold/60 group-hover:text-gold transition-colors">Review →</span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link href="/status"
+              className="glass-panel p-5 hover:border-gold/20 hover:bg-white/[0.04] transition-all group flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs text-white/25 uppercase tracking-widest mb-1">Master Dashboard</p>
+                <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors">Platform Status</p>
+                <p className="text-xs text-white/35 mt-1">Full history + current state + 14-milestone forward timeline</p>
+              </div>
+              <span className="text-gold/40 group-hover:text-gold transition-colors text-xl flex-shrink-0">→</span>
+            </Link>
+            <Link href="/data-room"
+              className="glass-panel p-5 hover:border-gold/20 hover:bg-white/[0.04] transition-all group flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs text-white/25 uppercase tracking-widest mb-1">Due Diligence</p>
+                <p className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors">Data Room</p>
+                <p className="text-xs text-white/35 mt-1">Structured documents for qualified institutional investors</p>
+              </div>
+              <span className="text-gold/40 group-hover:text-gold transition-colors text-xl flex-shrink-0">→</span>
+            </Link>
+          </div>
         </div>
       </section>
 
